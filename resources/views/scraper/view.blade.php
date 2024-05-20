@@ -1,44 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scraper Data</title>
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
-    <style>
-        .button-container {
-            white-space: nowrap;
-            text-align: center;
-        }
-
-        .button-container form {
-            display: inline-block;
-        }
-
-        .button-container form button {
-            margin-right: 10px; /* Add some spacing between buttons */
-        }
-
-    </style>
-</head>
-<body id="content" style="display:none;">
-    <h1 style='text-align:center' >Scraper Data</h1>
-    <!-- Button to trigger the scraping function -->
+<x-app-layout class="py-18">
+<div id="content" style="display:none;" class="mx-auto mb-6 space-y-6 max-w-7xl sm:px-6 lg:px-8">
+    <h1 style='text-align:center' class="mt-6 text-xl font-semibold text-gray-900" >Scraped Data</h1>
     <div class="button-container">
         <form action="{{ route('scraper.scrape') }}" method="post">
             @csrf
-            <button type="submit">Scrape Data</button>
+            <button type="submit" class="px-4 py-2 font-semibold text-gray-800 bg-white border border-gray-400 rounded shadow hover:bg-gray-100">Scrape Data</button>
         </form>
         <form action="{{ route('scraper.update') }}" method="post">
             @csrf
-            <button type="submit">Update Data</button>
+            <button type="submit" class="px-4 py-2 font-semibold text-gray-800 bg-white border border-gray-400 rounded shadow hover:bg-gray-100">Update Data</button>
         </form>
     </div>
-    <table id="scraper-table">
+    <table id="scraper-table" class="p-8 bg-white shadow sm:p-8 sm:rounded-lg">
         <thead>
             <tr>
                 <th>Title</th>
@@ -56,7 +29,6 @@
                 <td>{{ $d->score }}</td>
                 <td>{{ $d->date }}</td>
                 <td>
-                    <!-- Delete form for each row -->
                     <form action="{{ route('scraper.delete', $d->id) }}" method="post">
                         @csrf
                         @method('DELETE')
@@ -71,17 +43,14 @@
     <script>
         $(document).ready( function () {
             $('#scraper-table').DataTable({
-                "pageLength": 25 // Show 10 entries per page
+                "pageLength": 25
             });
         });
-
 
         window.addEventListener('load', function() {
             var content = document.getElementById('content');
             content.style.display = 'block';
         });
-
-
     </script>
-</body>
-</html>
+</div>
+</x-app-layout>

@@ -16,7 +16,7 @@ use App\Http\Controllers\ScraperController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('login');
 });
 
 Route::get('/dashboard', function () {

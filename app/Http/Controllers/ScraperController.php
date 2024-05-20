@@ -9,20 +9,24 @@ use Illuminate\Support\Facades\Http;
 
 class ScraperController extends Controller
 {
-    public function scraper()
-    {   
+    private function scaperConnect($url)
+    {
         $client = new Client();
-        $url = "https://news.ycombinator.com/";  
         try{
-            $crawler = $client->request('GET', $url);
+            return $client->request('GET', $url);
         }catch(\Exception $e)
         {
             echo $e->getMessage();
             die();
         }
+    }
+
+    public function scraper()
+    {   
+        $scraper = $this->scaperConnect("https://news.ycombinator.com/");  
        
         $data = [];   
-        $crawler->filter('.athing')->each(function ($node) use (&$data) {  
+        $scraper->filter('.athing')->each(function ($node) use (&$data) {  
         
             $id = $node->filter('tr')->attr('id');  
 
@@ -35,7 +39,7 @@ class ScraperController extends Controller
 
         });
 
-        $crawler->filter('.subline')->each(function ($node) use (&$data) {  
+        $scraper->filter('.subline')->each(function ($node) use (&$data) {  
         
             $id = trim($node->filter('.score')->attr('id'), 'score_');  
             
@@ -50,23 +54,15 @@ class ScraperController extends Controller
 
         $this->storePostsToDatabase($data);
 
-        return redirect()->route('scraper.view')->with('success', 'Data scraped successfully!');
+        return redirect()->route('scraper.view');
     }
 
 
     public function update()
     {   
-        $client = new Client();
-        $url = "https://news.ycombinator.com/";  
-        try{
-            $crawler = $client->request('GET', $url);
-        }catch(\Exception $e)
-        {
-            echo $e->getMessage();
-            die();
-        }
+        $scraper = $this->scaperConnect("https://news.ycombinator.com/");  
 
-        $crawler->filter('.subline')->each(function ($node) use (&$data) {  
+        $scraper->filter('.subline')->each(function ($node) use (&$data) {  
         
             $id = trim($node->filter('.score')->attr('id'), 'score_');  
             
@@ -81,20 +77,17 @@ class ScraperController extends Controller
             }
         });
 
-        return redirect()->route('scraper.view')->with('success', 'Data scraped successfully!');
+        return redirect()->route('scraper.view');
     }
 
 
     public function delete($id)
     {
-        // Find the record by ID
         $post = Data::findOrFail($id);
         
-        // Delete the record
         $post->delete();
 
-        // Redirect back to the scraper view
-        return redirect()->route('scraper.view')->with('success', 'Record deleted successfully!');
+        return redirect()->route('scraper.view');
     }
 
 
@@ -104,7 +97,6 @@ class ScraperController extends Controller
 
             $existingPost = Data::where('item_id', $item_id)->first();
             if ($existingPost) {
-                // Update existing post
                 $existingPost->update([
                     'title' => $post['title'] ?? null,
                     'link' => $post['link'] ?? null,
@@ -113,17 +105,14 @@ class ScraperController extends Controller
                 ]);
             }
             else{
-                // Create a new Post instance
                 $newPost = new Data();
 
-                // Assign attributes from the array to the Post instance
                 $newPost->item_id = $item_id;
                 $newPost->title = isset($post['title']) ? $post['title'] : null;
                 $newPost->link = isset($post['link']) ? $post['link'] : null;
                 $newPost->score = isset($post['score']) ? $post['score'] : null;
                 $newPost->date = isset($post['date']) ? $post['date'] : null;
 
-                // Save the Post instance to the database
                 $newPost->save();
             }
         }
@@ -132,10 +121,8 @@ class ScraperController extends Controller
 
     public function showData()
     {
-        // Fetch data from the database using the Post model
         $data = Data::all();
 
-        // Pass the fetched data to the view
         return view('scraper.view', compact('data'));
     }
 }
