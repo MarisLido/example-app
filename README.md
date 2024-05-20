@@ -25,7 +25,10 @@ In your terminal write:
 - `npm run dev` and `php artisan serve` to start the application.
 
 > [!NOTE]
-> Default user = [test@example.com, password] 
+> Default user = [
+>    test@example.com, 
+>   password,
+>  ] 
 
 
 > [!TIP]
