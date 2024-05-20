@@ -34,3 +34,6 @@ In your terminal write:
 > [!TIP]
 > You can run artisan commands to scrape and update data:
 > php artisan `scraper:scrape` and `scraper:update`
+
+> [!WARNING]
+> I'm using php8.2
