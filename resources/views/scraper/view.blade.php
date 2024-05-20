@@ -11,7 +11,7 @@
             <button type="submit" class="px-4 py-2 font-semibold text-gray-800 bg-white border border-gray-400 rounded shadow hover:bg-gray-100">Update Data</button>
         </form>
     </div>
-    <table id="scraper-table" class="p-8 bg-white shadow sm:p-8 sm:rounded-lg">
+    <table id="scraper-table" class="p-8 bg-white shadow table-auto sm:p-8 sm:rounded-lg">
         <thead>
             <tr>
                 <th>Title</th>
@@ -32,7 +32,7 @@
                     <form action="{{ route('scraper.delete', $d->id) }}" method="post">
                         @csrf
                         @method('DELETE')
-                        <button type="submit">Delete</button>
+                        <button type="submit" class="px-4 py-2 font-semibold text-red-700 bg-transparent border border-red-500 rounded-full hover:bg-red-500 hover:text-white hover:border-transparent">Delete</button>
                     </form>
                 </td>
             </tr>

@@ -25,6 +25,9 @@
             .button-container form button {
                 margin-right: 10px; /* Add some spacing between buttons */
             }
+            select[name^=scraper-table_length] {
+                width: 3.6rem;
+            }
         </style>
 
 
